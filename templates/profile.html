@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<h1 style="text-align: center;">User Profile</h1>
+<link rel="stylesheet" href="static/style2.css">
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="profile-container">
+        <h2 style="text-align: center;">User Profile</h2>
+        <div id="userInfo"></div>
+        <a href="edit"><button onclick="editInformation()">Edit Information</button></a>
+        <button onclick="logout()" style="margin-top: 10px;">Logout</button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+<script src="script.js"></script>
+<script>
+    // Check if user is logged in
+    firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+            // User is signed in, display user information
+            displayUserInfo(user);
+        } else {
+            // No user is signed in, redirect to login page
+            window.location.href = "login.html";
+        }
+    });
+
+    function displayUserInfo(user) {
+        const userInfo = document.getElementById("userInfo");
+        userInfo.innerHTML = `
+            <p><strong>First Name:</strong> ${user.displayName}</p>
+            <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Age:</strong> ${user.age}</p>
+            <p><strong>Sex:</strong> ${user.sex}</p>
+            <p><strong>Date of Birth:</strong> ${user.dateOfBirth}</p>
+        `;
+    }
+
+    function editInformation() {
+        window.location.href = "edit_profile.html";
+    }
+
+    function logout() {
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+            window.location.href = "login.html";
+        }).catch(function(error) {
+            // An error happened.
+            console.error(error);
+        });
+    }
+</script>
+
+</body>
+</html>

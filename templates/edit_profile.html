@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile</title>
+<link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="form-container">
+        <form id="editProfileForm" class="form">
+            <h2 style="text-align: center;">Edit Profile</h2>
+            <input type="text" id="firstName" placeholder="First Name" value="{{ user_data.firstname }}" required>
+            <input type="text" id="lastName" placeholder="Last Name" value="{{ user_data.lastname }}" required>
+            <input type="email" id="email" placeholder="Email" value="{{ user_data.email }}"  required>
+            <input type="text" id="age" placeholder="Age" value="{{ user_data.age }}" required>
+            <select id="sex" required>
+                <option value="" disabled selected>Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="date" id="dateOfBirth" value="{{ user_data.datetime }}" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
