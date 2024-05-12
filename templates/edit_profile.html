@@ -4,32 +4,83 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Profile</title>
-<link rel="stylesheet" href="static/style.css">
+<link rel="stylesheet" href="static\style.css">
 </head>
 <body>
 
 <div class="container">
     <div class="form-container">
-        <form id="editProfileForm" class="form">
+        <form id="editProfileForm" class="form" method="post">
             <h2 style="text-align: center;">Edit Profile</h2>
-            <input type="text" id="firstName" placeholder="First Name" value="{{ user_data.firstname }}" required>
-            <input type="text" id="lastName" placeholder="Last Name" value="{{ user_data.lastname }}" required>
-            <input type="email" id="email" placeholder="Email" value="{{ user_data.email }}"  required>
-            <input type="text" id="age" placeholder="Age" value="{{ user_data.age }}" required>
-            <select id="sex" required>
-                <option value="" disabled selected>Select Sex</option>
+            <input type="text" id="firstName" name="firstName" placeholder="First Name" value="{{ user_data.firstname }}" required>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name" value="{{ user_data.lastname }}" required>
+            <input type="email" id="email" name="email" placeholder="Email" value="{{ user_data.email }}" required>
+            <input type="text" id="age" name="age" placeholder="Age" value="{{ user_data.age }}" required>
+            <select id="sex" required name="sex">
+                <option value="{{ user_data.gender }}" disabled selected>Select Sex</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select>
-            <input type="date" id="dateOfBirth" value="{{ user_data.datetime }}" required>
-            <button type="submit">Submit</button>
+            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+            <!-- Add more input fields for other profile information -->
+            <a href="/edit"><button type="submit">Submit</button></a>
         </form>
     </div>
 </div>
 
+<!-- Firebase JavaScript SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
+<script src="script.js"></script>
+<script>
+// Populate the form with the current user's profile information
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        document.getElementById("firstName").value = user.displayName.split(' ')[0] || '';
+        document.getElementById("lastName").value = user.displayName.split(' ')[1] || '';
+        document.getElementById("email").value = user.email || '';
+        // Populate additional fields
+        // Replace 'user.age', 'user.sex', and 'user.dateOfBirth' with the actual properties from your database
+        document.getElementById("age").value = user.age || '';
+        document.getElementById("sex").value = user.sex || '';
+        document.getElementById("dateOfBirth").value = user.dateOfBirth || '';
+    } else {
+        // No user is signed in, redirect to login page
+        window.location.href = "login.html";
+    }
+});
 
-
+// Edit Profile form submission
+document.getElementById("editProfileForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    const user = firebase.auth().currentUser;
+    const newFirstName = document.getElementById("firstName").value;
+    const newLastName = document.getElementById("lastName").value;
+    const newEmail = document.getElementById("email").value;
+    const newAge = document.getElementById("age").value;
+    const newSex = document.getElementById("sex").value;
+    const newDateOfBirth = document.getElementById("dateOfBirth").value;
+    
+    // Update the user's profile information
+    user.updateProfile({
+        displayName: newFirstName + ' ' + newLastName,
+        email: newEmail,
+        age: newAge,
+        sex: newSex,
+        dateOfBirth: newDateOfBirth
+    }).then(function() {
+        // Profile updated successfully
+        console.log("Profile updated successfully");
+        // Redirect or show a message to the user
+    }).catch(function(error) {
+        // An error occurred
+        console.error(error.message);
+        // Handle errors, e.g., display error message to the user
+    });
+});
+</script>
 
 </body>
 </html>

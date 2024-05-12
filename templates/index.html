@@ -9,15 +9,7 @@
 <body>
 
 <div class="container">
-    <!-- <div class="form-container">
-        <form id="loginForm" class="form" method="post">
-            <h2 style="text-align: center;">Login</h2>
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
-        <button id="signupOption" class="option-btn">Sign Up</button>
-    </div> -->
+   
 
     <div class="form-container" >
         <form id="signupForm" class="form" method="post">
@@ -36,34 +28,10 @@
             <input type="datetime-local" name="dateTimePicker" id="dateTimePicker" required>
             <button type="submit">Sign Up</button>
         </form>
-        <button id="loginOption" class="option-btn">Login</button>
+        <a href="/"><button id="loginOption" class="option-btn">Login</button></a>
     </div>
 </div>
 
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-    const loginOption = document.getElementById("loginOption");
-    const signupOption = document.getElementById("signupOption");
-
-    // Show login form by default
-    loginForm.parentElement.style.display = "block";
-    signupForm.parentElement.style.display = "none";
-
-    // Switch to sign up form
-    signupOption.addEventListener("click", function() {
-        loginForm.parentElement.style.display = "none";
-        signupForm.parentElement.style.display = "block";
-    });
-
-    // Switch to login form
-    loginOption.addEventListener("click", function() {
-        loginForm.parentElement.style.display = "block";
-        signupForm.parentElement.style.display = "none";
-    });
-});
-</script> -->
 
 </body>
 </html>
