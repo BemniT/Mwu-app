@@ -4,52 +4,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Staff Member Dashboard</title>
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="dashboard.css">
+<!-- <link rel="stylesheet" href="static/style.css"> -->
+<link rel="stylesheet" href="static/dashboard.css">
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+rel="stylesheet"
+/>
+<link rel="stylesheet" href="./static/tailwind.output.css" />
+<script
+src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"
+defer
+></script>
+<script src="./static/js/init-alpine.js"></script>
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"
+/>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+defer
+></script>
+
 </head>
 <body>
 
 <div class="container">
     <div class="dashboard-container">
-        <h2>Staff Member Dashboard</h2>
+        <h2 >Staff Member Dashboard</h2>
         <div id="userList"></div>
-        <button onclick="logout()">Logout</button>
+       <a href="/logout"> <button >Logout</button></a>
     </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.3/firebase-database.js"></script>
-<script src="script.js"></script>
-<script>
-    // Check if user is logged in and is staff member
-    firebase.auth().onAuthStateChanged(function(user) {
-        if (user && user.email === "staff@example.com") {
-            // User is signed in and is staff member, fetch user information
-            fetchUserInformation();
-        } else {
-            // No staff member is signed in, redirect to login page
-            window.location.href = "login.html";
-        }
-    });
-
-    function fetchUserInformation() {
-        const userList = document.getElementById("userList");
-        // Here, you can fetch user information from the database and display it
-        // This could involve querying your database for user records and rendering them on the page
-        userList.innerHTML = "<p>User information will be displayed here.</p>";
-    }
-
-    function logout() {
-        firebase.auth().signOut().then(function() {
-            // Sign-out successful.
-            window.location.href = "login.html";
-        }).catch(function(error) {
-            // An error happened.
-            console.error(error);
-        });
-    }
-</script>
-
+<div class="w-full overflow-hidden rounded-lg shadow-xs" style="margin-top: 30px;">
+    <div class="w-full overflow-x-auto">
+      <table class="w-full whitespace-no-wrap">
+        <thead>
+          <tr
+            class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+          >
+            <th class="px-4 py-3">User</th>
+            <th class="px-4 py-3">Email</th>
+            <th class="px-4 py-3">Gender</th>
+            <th class="px-4 py-3">Meeting Date</th>
+            <th class="px-4 py-3">Age</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+          {% for user in users %}
+          <tr class="text-gray-700 dark:text-gray-400">
+              <td class="px-4 py-3">
+                  <div class="flex items-center text-sm">
+                      <div>
+                          <p class="font-semibold">{{ user.client_Fname }} {{user.client_Lname}}</p>
+                          <p class="text-xs text-gray-600 dark:text-gray-400">Client</p>
+                      </div>
+                  </div>
+              </td>
+              <td class="px-4 py-3 text-sm">
+                  $ {{ user.email }}
+              </td>
+              <td class="px-4 py-3 text-xs">
+                  <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100"> {{ user.gender }}</span>
+              </td>
+              <td class="px-4 py-3 text-sm">
+                {{ user.date }}
+              </td>
+              <td class="px-4 py-3 text-sm">
+                {{ user.age }}
+            </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+      
+      </table>
+    </div>
+    </div>
+    
 </body>
 </html>

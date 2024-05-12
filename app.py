@@ -22,7 +22,7 @@ real_db = firebase.database()
 storage = firebase.storage()
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/index.html', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         first_name = request.form['firstName']
@@ -50,7 +50,7 @@ def register():
 
     return render_template('index.html')
 
-@app.route('/login.html', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         user_name = request.form['user_name']
@@ -75,13 +75,58 @@ def login():
             flash('User not found. Please register first.', 'error')
     
     return render_template('login.html')
-@app.route('/adminLogin.html')
+@app.route('/adminLogin.html',methods=['GET','POST'])
 def adminLogin():
-        
+        if request.method == 'POST':
+            user_name = request.form['user_name']
+            password = request.form['password']
+            
+            user = real_db.child('Admin').order_by_child("user_name").equal_to(user_name).get().val()
+            
+            if user:
+                user_name1 = list(user.keys())[0]
+                user_data = user[user_name1]
+                
+                if password == user_data.get('password'):
+                    # Session management
+                    # session['user_id'] = user_id
+                    # session['user_name'] = user_name
+                    # session['user_data'] = user_data
+                    
+                    return redirect(url_for('staffmember'))
+                else:
+                    flash('Incorrect password. Please try again.', 'error')
+        else:
+            flash('User not found. Please register first.', 'error')
         return render_template('adminLogin.html')
 @app.route('/profile.html')
 def profile():
         return render_template('profile.html')
+
+
+@app.route('/staffmember.html')
+def staffmember():
+        users = real_db.child('User').get().val()
+
+        user_list = []
+
+        for user_id, user_data  in users.items():
+          user_first = user_data.get("firstname","")
+          user_last = user_data.get("lastname","")
+          user_email = user_data.get("email","")
+          user_gender = user_data.get("gender","")
+          user_age = user_data.get("age","")
+          user_date = user_data.get("datetime","")
+          user_list.append({
+               "client_Fname" : user_first,
+               "client_Lname" : user_last,
+               "email" : user_email,
+               "gender": user_gender,
+               "age": user_age,
+               "date": user_date,
+               
+          })
+        return render_template('staffmember.html', users = user_list)
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
     if 'user_id' in session:
